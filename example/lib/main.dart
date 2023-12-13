@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:example/state/one/data_one_cubit.dart';
 import 'package:example/state/two/data_two_cubit.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -20,9 +21,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => DataTwoCubit()),
 
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         title: 'MultiBlocBuilder Demo',
-        home: const MyHomePage(),
+        home: MyHomePage(),
       )
     );
   }
@@ -48,11 +49,22 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(),
       body: Column(
         children: [
-          MultiBlocBuilder(
+          MultiBlocConsumer(
             blocs: [
               context.watch<DataOneCubit>(),
               context.watch<DataTwoCubit>(),
             ],
+            buildWhen: (next, prev) {
+              log('BUILD WHEN: $next, $prev');
+              return true;
+            },
+            listener: (context, states) {
+              log('LISTENER: $states');
+            },
+            listenWhen: (next, prev) {
+              log('LISTEN WHEN: $next, $prev');
+              return true;
+            },
             builder: (context, states) {
               DataOneState one = states[0];
               DataTwoState two = states[1];
