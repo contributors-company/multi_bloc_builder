@@ -13,4 +13,3 @@ class DataOneSuccess extends DataOneState {
 }
 
 class DataOneError extends DataOneState {}
-

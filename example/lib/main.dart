@@ -10,22 +10,22 @@ void main() {
   runApp(const MyApp());
 }
 
+const t = [DataOneCubit, DataTwoCubit];
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => DataOneCubit()),
-        BlocProvider(create: (context) => DataTwoCubit()),
-
-      ],
-      child: const MaterialApp(
-        title: 'MultiBlocBuilder Demo',
-        home: MyHomePage(),
-      )
-    );
+        providers: [
+          BlocProvider(create: (context) => DataOneCubit()),
+          BlocProvider(create: (context) => DataTwoCubit()),
+        ],
+        child: const MaterialApp(
+          title: 'MultiBlocBuilder Demo',
+          home: MyHomePage(),
+        ));
   }
 }
 
@@ -37,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   _fetch() {
     context.read<DataOneCubit>().fetch();
     context.read<DataTwoCubit>().fetch();
@@ -46,41 +45,39 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          MultiBlocConsumer(
-            blocs: [
-              context.watch<DataOneCubit>(),
-              context.watch<DataTwoCubit>(),
-            ],
-            buildWhen: (next, prev) {
-              log('BUILD WHEN: $next, $prev');
-              return true;
-            },
-            listener: (context, states) {
-              log('LISTENER: $states');
-            },
-            listenWhen: (next, prev) {
-              log('LISTEN WHEN: $next, $prev');
-              return true;
-            },
-            builder: (context, states) {
-              DataOneState one = states[0];
-              DataTwoState two = states[1];
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            MultiBlocConsumer(
+              blocs: [
+                context.watch<DataOneCubit>(),
+                context.watch<DataTwoCubit>(),
+              ],
+              buildWhen: (next, prev) {
+                log('BUILD WHEN: $next, $prev');
+                return true;
+              },
+              listener: (context, states) {
+                log('LISTENER: $states');
+              },
+              listenWhen: (next, prev) {
+                log('LISTEN WHEN: $next, $prev');
+                return true;
+              },
+              builder: (context, states) {
+                final one = states.get<DataOneState>();
+                final two = states.get<DataTwoState>();
 
-              return Column(
-                children: [
-                  Text(one.toString()),
-                  Text(two.toString()),
-                ],
-              );
-            },
-          ),
-
-          ElevatedButton(onPressed: _fetch, child: const Text('Fetch'))
-        ],
-      )
-    );
+                return Column(
+                  children: [
+                    Text(one.toString()),
+                    Text(two.toString()),
+                  ],
+                );
+              },
+            ),
+            ElevatedButton(onPressed: _fetch, child: const Text('Fetch'))
+          ],
+        ));
   }
 }

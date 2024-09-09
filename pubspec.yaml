@@ -1,6 +1,6 @@
 name: multi_bloc_builder
-description: "VERY COOL MULTI BLOC BUILDER"
-version: 1.0.0
+description: "A Flutter package that provides a widget to listen to multiple blocs and rebuilds the widget when any of the blocs emit a new state."
+version: 1.0.1
 homepage: https://github.com/AlexHCJP/multi_bloc_builder
 
 environment:
@@ -8,7 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  bloc: ^8.1.2
+  bloc: ^8.1.4
   flutter:
     sdk: flutter
 
